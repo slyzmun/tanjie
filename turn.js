@@ -17,6 +17,25 @@
  * 
  **/
 
+/**
+* turn.js第三版
+* www.turnjs.com
+*
+*版权所有(C) 2012，Emmanuel Garcia。
+*保留所有权利。
+*
+*以源代码和二进制形式重新分发和使用，有或没有
+*允许修改，前提是满足以下条件
+*符合:
+*
+* 1.源代码的再分发必须保留上述版权
+*注意，此条件列表和以下免责声明。
+*
+* 2.任何再分发、使用或修改都只针对个人
+*利益，而非任何商业目的或金钱利益。
+*
+**/
+
 (function($) {
 
 'use strict';
@@ -34,10 +53,10 @@ var has3d,
 	events = (isTouch) ? {start: 'touchstart', move: 'touchmove', end: 'touchend'}
 			: {start: 'mousedown', move: 'mousemove', end: 'mouseup'},
 
-	// Contansts used for each corner
-	// tl * tr
-	// *     *
-	// bl * br
+//用于每个角的常数
+// tl * tr
+// * *
+// bl * br
 
 	corners = {
 		backward: ['bl', 'tl'],
@@ -47,73 +66,73 @@ var has3d,
 
 	displays = ['single', 'double'],
 
-	// Default options
+//首选项
 
 	turnOptions = {
 
-		// First page
+//第一页
 
 		page: 1,
 		
-		// Enables gradients
+//启用渐变
 
 		gradients: true,
 
-		// Duration of transition in milliseconds
+//以毫秒为单位的转换持续时间
 
 		duration: 600,
 
-		// Enables hardware acceleration
+//启用硬件加速
 
 		acceleration: true,
 
-		// Display
+//显示
 
 		display: 'double',
 
-		// Events
+//事件
 
 		when: null
 	},
 
 	flipOptions = {
 
-		// Back page
+//返回页面
 		
 		folding: null,
 
-		// Corners
-		// backward: Activates both tl and bl corners
-		// forward: Activates both tr and br corners
-		// all: Activates all the corners
+//角落
+// backward:激活tl和bl角
+// forward:激活tr和br角
+// all:激活所有角
 
 		corners: 'forward',
 		
-		// Size of the active zone of each corner
+//每个角的活动区域的大小
 
 		cornerSize: 100,
 
-		// Enables gradients
+//启用渐变
 
 		gradients: true,
 
-		// Duration of transition in milliseconds
+//以毫秒为单位的转换持续时间
 
 		duration: 600,
 
-		// Enables hardware acceleration
+//启用硬件加速（移动端必开）
 
 		acceleration: true
 	},
 
-	// Number of pages in the DOM, minimum value: 6
+// DOM中的页数，最小值:6
 
 	pagesInDOM = 6,
 	
 	pagePosition = {0: {top: 0, left: 0, right: 'auto', bottom: 'auto'},
 					1: {top: 0, right: 0, left: 'auto', bottom: 'auto'}},
 
-	// Gets basic attributes for a layer
+//获取层的基本属性
 
 	divAtt = function(top, left, zIndex, overf) {
 		return {'css': {
@@ -126,7 +145,7 @@ var has3d,
 			};
 	},
 
-	// Gets a 2D point from a bezier curve of four points
+//从四个点的贝塞尔曲线中获取一个2D点
 
 	bezier = function(p1, p2, p3, p4, t) {
 		var mum1 = 1 - t,
@@ -137,43 +156,43 @@ var has3d,
 						Math.round(mum13*p1.y + 3*t*mum1*mum1*p2.y + 3*t*t*mum1*p3.y + mu3*p4.y));
 	},
 	
-	// Converts an angle from degrees to radians
+//将角度从度转换为弧度
 
 	rad = function(degrees) {
 		return degrees/180*PI;
 	},
 
-	// Converts an angle from radians to degrees
+//将角度从弧度转换为度数
 
 	deg = function(radians) {
 		return radians/PI*180;
 	},
 
-	// Gets a 2D point
+//获取一个2D点
 
 	point2D = function(x, y) {
 		return {x: x, y: y};
 	},
 
-	// Returns the traslate value
+//返回变换值
 
 	translate = function(x, y, use3d) {
 		return (has3d && use3d) ? ' translate3d(' + x + 'px,' + y + 'px, 0px) ' : ' translate(' + x + 'px, ' + y + 'px) ';
 	},
 
-	// Returns the rotation value
+//返回旋转值
 
 	rotate = function(degrees) {
 		return ' rotate(' + degrees + 'deg) ';
 	},
 
-	// Checks if a property belongs to an object
+//检查属性是否属于某个对象
 
 	has = function(property, object) {
 		return Object.prototype.hasOwnProperty.call(object, property);
 	},
 
-	// Gets the CSS3 vendor prefix
+//获取CSS3供应商前缀
 
 	getPrefix = function() {
 		var vendorPrefixes = ['Moz','Webkit','Khtml','O','ms'],
